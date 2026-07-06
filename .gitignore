@@ -1,0 +1,6 @@
+.agents/
+.claude/
+skills-lock.json
+.cache-*
+node_modules/
+*.tgz

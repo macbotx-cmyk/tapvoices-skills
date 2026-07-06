@@ -1,0 +1,28 @@
+{
+  "name": "tapvoices",
+  "version": "0.2.3",
+  "description": "TapVoices — IDE write to iPhone Raw Stream (tap CLI + Agent skills)",
+  "bin": {
+    "tap": "bin/tap.js",
+    "tapvoices": "bin/tapvoices.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "files": [
+    "bin",
+    "lib",
+    "skills"
+  ],
+  "keywords": [
+    "tapvoices",
+    "cursor",
+    "handoff",
+    "skills"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/macbotx-cmyk/tapvoices-skills.git"
+  }
+}
