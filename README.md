@@ -10,16 +10,24 @@ Push verbatim text from your coding agent (Cursor, Claude Code, Codex) to **TapV
 npx tapvoices install
 ```
 
+Installs `tap` + `tap-write` skills to **Cursor, Claude Code, and Codex** non-interactively. No need to run `npx skills add` separately.
+
 With Device ID from **TapVoices app → Device** (phone icon), bind in the same step:
 
 ```bash
 npx tapvoices install --device-id "<Device-ID>"
 ```
 
-Or install skills from this repo:
+**Self-check only** (after install):
 
 ```bash
-npx skills add macbotx-cmyk/tapvoices-skills -y
+npx tapvoices doctor --json
+```
+
+Alternative (manual skills install from GitHub; if clone fails, prefix `GIT_HTTP_VERSION=HTTP/1.1`):
+
+```bash
+GIT_HTTP_VERSION=HTTP/1.1 npx skills add macbotx-cmyk/tapvoices-skills -y
 ```
 
 ## Write from your agent
@@ -48,12 +56,6 @@ npx tapvoices write --text "user-specified content" --source-app cursor
 Legacy alias: `tap` (same CLI).
 
 Config: `~/.tapvoices/config.json` · Default API: `https://www.tapvoices.com`
-
-## Self-check
-
-```bash
-npx tapvoices doctor --json
-```
 
 ## Develop locally
 
