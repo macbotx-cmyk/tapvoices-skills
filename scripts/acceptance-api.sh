@@ -53,7 +53,7 @@ set +e
 PUSH=$(curl -sf -X POST "$API_BASE/api/app/handoff/push" \
   -H "Authorization: Bearer $TOKEN" \
   -H 'Content-Type: application/json' \
-  -d "{\"text\":\"$MARKER ONLY_PUSH_X body\",\"label\":\"acceptance\",\"sourceApp\":\"cursor\"}")
+  -d "{\"text\":\"$MARKER ONLY_PUSH_X body\",\"label\":\"acceptance\",\"sourceApp\":\"cursor\",\"summary\":{\"headline\":\"acceptance push\",\"bullets\":[\"smoke\"]}}")
 PUSH_EC=$?
 set -e
 if [[ $PUSH_EC -ne 0 ]]; then

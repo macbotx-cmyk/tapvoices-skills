@@ -35,12 +35,16 @@ GIT_HTTP_VERSION=HTTP/1.1 npx skills add macbotx-cmyk/tapvoices-skills -y
 After bind, when the user explicitly asks to send content:
 
 ```bash
-npx tapvoices write --text "user-specified content" --source-app cursor
+npx tapvoices write --text "user-specified content" \
+  --label "title" \
+  --summary-headline "One-line digest" \
+  --summary-bullets "point 1|point 2" \
+  --source-app cursor
 ```
 
-Response includes `"kind": "inbox"`. User **Apply**s on iPhone → **Agent inbox**.
+Response includes `"kind": "inbox"`. Phone auto-syncs to **Agent Mail** (no Apply).
 
-**Rules:** only write when the user asks; never auto-push chat logs or unstated files.
+**Rules:** only write when the user asks; never auto-push chat logs or unstated files. **`--label` and summary are required.**
 
 ## Read from TapVoices
 
