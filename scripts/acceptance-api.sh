@@ -69,7 +69,8 @@ fi
 echo "$PUSH" | node -e "let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{const j=JSON.parse(d);if(j.code!==0)process.exit(1)})" \
   || fail "push code != 0"
 PUSH_ID=$(echo "$PUSH" | node -e "let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>process.stdout.write(String(JSON.parse(d).data.id)))")
-pass "push queued id=$PUSH_ID"
+echo "$PUSH" | grep -q '"kind":"inbox"' || fail "push response missing kind=inbox"
+pass "push queued id=$PUSH_ID (kind=inbox)"
 
 echo "==> AC-0: pending contains marker"
 PENDING=$(curl -sf "$API_BASE/api/app/handoff/push/pending" \
@@ -91,6 +92,40 @@ PENDING2=$(curl -sf "$API_BASE/api/app/handoff/push/pending" \
   -H "Authorization: Bearer $TOKEN") || fail "pending2 HTTP"
 echo "$PENDING2" | grep -q "$MARKER" && fail "marker still pending after consume" || true
 pass "pending cleared"
+
+echo "==> Agent Mail: inbox latest after consume"
+INBOX=$(curl -sf "$API_BASE/api/app/mail/inbox/latest" \
+  -H "Authorization: Bearer $TOKEN") || fail "inbox latest HTTP (deploy Agent Mail P1 on server?)"
+echo "$INBOX" | grep -q "$MARKER" || fail "inbox missing marker"
+echo "$INBOX" | grep -q '"kind":"inbox"' || fail "inbox missing kind"
+pass "inbox latest has marker"
+
+echo "==> Agent Mail: sent create + latest"
+SENT=$(curl -sf -X POST "$API_BASE/api/app/mail/sent" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H 'Content-Type: application/json' \
+  -d "{\"summary\":{\"headline\":\"acceptance\",\"bullets\":[\"ok\"]},\"notes\":[\"hold note\"],\"refInboxIds\":[\"in_${PUSH_ID}\"]}") \
+  || fail "sent create HTTP"
+echo "$SENT" | grep -q '"kind":"sent"' || fail "sent missing kind"
+SENT_L=$(curl -sf "$API_BASE/api/app/mail/sent/latest" \
+  -H "Authorization: Bearer $TOKEN") || fail "sent latest HTTP"
+echo "$SENT_L" | grep -q 'hold note' || fail "sent latest missing note"
+pass "sent latest ok"
+
+echo "==> CLI read inbox/sent"
+set +e
+READ_IN=$(node "$CLI" read inbox --latest --json 2>&1)
+READ_EC=$?
+set -e
+if [[ $READ_EC -ne 0 ]]; then fail "cli read inbox (exit $READ_EC): $READ_IN"; fi
+echo "$READ_IN" | grep -qE '"kind"[[:space:]]*:[[:space:]]*"inbox"' || fail "cli read inbox missing kind: $READ_IN"
+set +e
+READ_SE=$(node "$CLI" read sent --latest --json 2>&1)
+READ_EC2=$?
+set -e
+if [[ $READ_EC2 -ne 0 ]]; then fail "cli read sent (exit $READ_EC2): $READ_SE"; fi
+echo "$READ_SE" | grep -qE '"kind"[[:space:]]*:[[:space:]]*"sent"' || fail "cli read sent missing kind: $READ_SE"
+pass "cli read inbox/sent"
 
 echo "==> AC-FAIL: bad token rejected"
 set +e

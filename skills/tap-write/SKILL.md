@@ -1,11 +1,11 @@
 ---
 name: tap-write
-description: Write user-specified verbatim text to TapVoices via tap CLI (Handoff push).
+description: Write user-specified verbatim text to TapVoices via tap CLI (Agent inbox).
 ---
 
 # Tap Write
 
-Execute **only** when the user explicitly wants content written to TapVoices.
+Execute **only** when the user explicitly wants content sent **to TapVoices**.
 
 ## Hard constraints
 
@@ -28,13 +28,28 @@ cat file | npx tapvoices write --source-app claude-code
 
 ## After write
 
-- Report CLI JSON `{ "ok": true, "id": ... }`.
-- Tell user: foreground TapVoices on iPhone (background → foreground), then swipe **query** — main screen does not show push text (by design).
+- Report CLI JSON `{ "ok": true, "kind": "inbox", "id": ... }`.
+- Tell user: open TapVoices on iPhone → **Apply** pending → content appears in **Agent inbox** (not mixed into Record timeline).
+
+## Read (when user asks — see `/tap`)
+
+```bash
+npx tapvoices read inbox --latest --json
+npx tapvoices read sent --latest --json
+```
+
+Read inbox or sent **as the user specifies**; they are peer mailboxes.
 
 ## Examples
 
-**User:** 「把选中的代码写到 TapVoices」
+**User:** 「把选中的代码发到 TapVoices」
 → Read selection only → `npx tapvoices write --text "..."`
 
-**User:** 「写到 TapVoices」（无内容）
-→ Ask what to write; **do not** write chat log
+**User:** 「发到 TapVoices」（无内容）
+→ Ask what to send; **do not** write chat log
+
+**User:** 「读 TapVoices 里最新文档」
+→ `npx tapvoices read inbox --latest --json`
+
+**User:** 「读我在手机上回的反馈」
+→ `npx tapvoices read sent --latest --json`

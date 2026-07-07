@@ -1,8 +1,8 @@
 {
   "name": "tapvoices",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "homepage": "https://github.com/macbotx-cmyk/tapvoices-skills#readme",
-  "description": "TapVoices — IDE write to iPhone Raw Stream (tap CLI + Agent skills)",
+  "description": "TapVoices CLI — write to and read from TapVoices (Agent Mail inbox/sent) + Agent skills",
   "bin": {
     "tap": "bin/tap.js",
     "tapvoices": "bin/tapvoices.js"
@@ -20,6 +20,7 @@
     "tapvoices",
     "cursor",
     "handoff",
+    "agent-mail",
     "skills"
   ],
   "repository": {

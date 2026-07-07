@@ -1,6 +1,6 @@
 # TapVoices CLI & Agent Skills
 
-Push verbatim text from your coding agent (Cursor, Claude Code, Codex) to **TapVoices** on iPhone — voice-first, no long reading on a small screen.
+Send and read content between your coding agent (Cursor, Claude Code, Codex) and **TapVoices** on iPhone — Agent Mail: Agent inbox + your sent replies.
 
 **Website:** [www.tapvoices.com](https://www.tapvoices.com)
 
@@ -10,7 +10,7 @@ Push verbatim text from your coding agent (Cursor, Claude Code, Codex) to **TapV
 npx tapvoices install
 ```
 
-Installs `tap` + `tap-write` skills to **Cursor, Claude Code, and Codex** non-interactively. No need to run `npx skills add` separately.
+Installs `tap` + `tap-write` skills to **Cursor, Claude Code, and Codex** non-interactively.
 
 With Device ID from **TapVoices app → Device** (phone icon), bind in the same step:
 
@@ -24,25 +24,39 @@ npx tapvoices install --device-id "<Device-ID>"
 npx tapvoices doctor --json
 ```
 
-Alternative (manual skills install from GitHub; if clone fails, prefix `GIT_HTTP_VERSION=HTTP/1.1`):
+Alternative (manual skills install from GitHub):
 
 ```bash
 GIT_HTTP_VERSION=HTTP/1.1 npx skills add macbotx-cmyk/tapvoices-skills -y
 ```
 
-## Write from your agent
+## Write to TapVoices
 
-After bind, ask your agent explicitly, for example:
-
-> Write this selection to TapVoices verbatim.
-
-The agent runs:
+After bind, when the user explicitly asks to send content:
 
 ```bash
 npx tapvoices write --text "user-specified content" --source-app cursor
 ```
 
+Response includes `"kind": "inbox"`. User **Apply**s on iPhone → **Agent inbox**.
+
 **Rules:** only write when the user asks; never auto-push chat logs or unstated files.
+
+## Read from TapVoices
+
+When the user asks to read TapVoices content (no fixed order — inbox and sent are peer mailboxes):
+
+```bash
+npx tapvoices read inbox --latest --json
+npx tapvoices read sent --latest --json
+npx tapvoices show inbox in_101
+npx tapvoices show sent se_201
+```
+
+- **`read inbox`** → latest Agent message (`kind: inbox`, field `text`)
+- **`read sent`** → latest user reply (`kind: sent`, fields `summary` + `notes`)
+
+Requires Agent Mail API on the server (deploy before use).
 
 ## Commands
 
@@ -50,7 +64,9 @@ npx tapvoices write --text "user-specified content" --source-app cursor
 |---------|-------------|
 | `tapvoices install` | Install agent skills + optional Device ID bind |
 | `tapvoices bind` | Bind iPhone Device ID |
-| `tapvoices write` | Push text to phone Handoff queue |
+| `tapvoices write` | Send text to TapVoices (Agent inbox) |
+| `tapvoices read inbox\|sent` | Read latest or `--id` |
+| `tapvoices show inbox\|sent <id>` | Read one message by id |
 | `tapvoices doctor` | Check local config |
 
 Legacy alias: `tap` (same CLI).
