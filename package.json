@@ -1,6 +1,6 @@
 {
   "name": "tapvoices",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "homepage": "https://github.com/macbotx-cmyk/tapvoices-skills#readme",
   "description": "TapVoices CLI — write to and read from TapVoices (Agent Mail inbox/sent) + Agent skills",
   "bin": {

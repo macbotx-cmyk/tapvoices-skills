@@ -27,8 +27,6 @@ npx tapvoices write --file ./path/user/named \
   --label "title" \
   --summary-json '{"headline":"One-line digest","bullets":["point 1","point 2"]}' \
   --source-app codex
-# Optional: link to prior mail
-npx tapvoices write --text "..." --label "..." --summary-headline "..." --summary-bullets "..." --ref-mail in_6
 ```
 
 ## source-app

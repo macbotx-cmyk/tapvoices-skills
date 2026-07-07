@@ -51,7 +51,7 @@ npx tapvoices show sent se_201
 | Read | `kind` | Use |
 |------|--------|-----|
 | `read inbox` | `inbox` | Agent delivery — field `text` |
-| `read sent` | `sent` | User reply — `summary` + `notes[]` |
+| `read sent` | `sent` | User reply — `summary` + `body` (`holds[]`, `queries[]`) |
 
 Parse by `kind`; do not treat inbox and sent as the same shape.
 

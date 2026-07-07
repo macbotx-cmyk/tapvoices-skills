@@ -104,12 +104,13 @@ echo "==> Agent Mail: sent create + latest"
 SENT=$(curl -sf -X POST "$API_BASE/api/app/mail/sent" \
   -H "Authorization: Bearer $TOKEN" \
   -H 'Content-Type: application/json' \
-  -d "{\"summary\":{\"headline\":\"acceptance\",\"bullets\":[\"ok\"]},\"notes\":[\"hold note\"],\"refInboxIds\":[\"in_${PUSH_ID}\"]}") \
+  -d "{\"summary\":{\"headline\":\"acceptance\",\"bullets\":[\"ok\"]},\"body\":{\"holds\":[\"hold note\"],\"queries\":[]},\"refInboxIds\":[\"in_${PUSH_ID}\"]}") \
   || fail "sent create HTTP"
 echo "$SENT" | grep -q '"kind":"sent"' || fail "sent missing kind"
 SENT_L=$(curl -sf "$API_BASE/api/app/mail/sent/latest" \
   -H "Authorization: Bearer $TOKEN") || fail "sent latest HTTP"
-echo "$SENT_L" | grep -q 'hold note' || fail "sent latest missing note"
+echo "$SENT_L" | grep -q 'hold note' || fail "sent latest missing body hold"
+echo "$SENT_L" | grep -q '"body"' || fail "sent latest missing body field"
 pass "sent latest ok"
 
 echo "==> CLI read inbox/sent"

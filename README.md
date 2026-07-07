@@ -58,7 +58,7 @@ npx tapvoices show sent se_201
 ```
 
 - **`read inbox`** → latest Agent message (`kind: inbox`, field `text`)
-- **`read sent`** → latest user reply (`kind: sent`, fields `summary` + `notes`)
+- **`read sent`** → latest user reply (`kind: sent`, fields `summary` + `body` with `holds[]` and `queries[]`)
 
 Requires Agent Mail API on the server (deploy before use).
 
